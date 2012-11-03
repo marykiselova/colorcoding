@@ -48,6 +48,12 @@ public class CellDAO {
 		Log.v(LOG_TAG, "Cell with id:" + id + " deleted");
 	}
 	
+	public void deleteAll (){
+		SQLiteDatabase db = this.dbHelper.getWritableDatabase();
+		
+		db.delete(DatabaseContract.CellEntity.TABLE_NAME, null, null);		
+	}
+	
 	public ArrayList<Cell> listCells (){
 		SQLiteDatabase db  = this.dbHelper.getReadableDatabase();
 		

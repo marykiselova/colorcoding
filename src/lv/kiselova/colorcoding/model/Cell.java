@@ -16,6 +16,11 @@ public class Cell {
 	public Cell() {
 		super();		
 	}
+	
+	public Cell(String value) {
+		super();
+		this.value = value;
+	}
 
 	public int getId() {
 		return id;

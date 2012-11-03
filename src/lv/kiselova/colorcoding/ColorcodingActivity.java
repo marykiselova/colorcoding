@@ -1,20 +1,23 @@
 package lv.kiselova.colorcoding;
 
+import java.util.ArrayList;
+
 import lv.kiselova.colorcoding.dao.CardDAO;
 import lv.kiselova.colorcoding.dao.CellDAO;
 import lv.kiselova.colorcoding.db.DatabaseHelper;
+import lv.kiselova.colorcoding.model.Cell;
+import lv.kiselova.colorcoding.view.CardGridViewAdapter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.GridView;
 
 public class ColorcodingActivity extends FragmentActivity {
 
@@ -43,17 +46,23 @@ public class ColorcodingActivity extends FragmentActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        
+                
         DatabaseHelper helper = new DatabaseHelper(getApplicationContext());
         CardDAO cardDAO = new CardDAO(helper);
-        cardDAO.createCard("test", 5, 5);
+        //cardDAO.createCard("test", 5, 5);
         cardDAO.listCards();
-        cardDAO.deleteCard(1);
+       // cardDAO.deleteAll();
+        //cardDAO.deleteCard(1);
         
         CellDAO cellDAO = new CellDAO(helper);
-        cellDAO.createCell("red", "1", 1, 1, 1);
-        cellDAO.listCells();
-        cellDAO.deleteCell(1);
+//        cellDAO.createCell("#2FD69F", "1", 1, 1, 1);
+//        cellDAO.createCell("#9CD62F", "2", 1, 1, 1);
+//        cellDAO.createCell("#C6E68C", "3", 1, 1, 1);
+//        cellDAO.createCell("#F0C5AA", "4", 1, 1, 1);
+//        cellDAO.createCell("#DFF5B8", "5", 1, 1, 1);
+        //cellDAO.listCells();
+       // cellDAO.deleteCell(1);
+        //cellDAO.deleteAll();
 
     }
 
@@ -87,15 +96,15 @@ public class ColorcodingActivity extends FragmentActivity {
 
         @Override
         public int getCount() {
-            return 3;
+            return 1;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0: return getString(R.string.title_section1).toUpperCase();
-                case 1: return getString(R.string.title_section2).toUpperCase();
-                case 2: return getString(R.string.title_section3).toUpperCase();
+                //case 1: return getString(R.string.title_section2).toUpperCase();
+                //case 2: return getString(R.string.title_section3).toUpperCase();
             }
             return null;
         }
@@ -113,11 +122,20 @@ public class ColorcodingActivity extends FragmentActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            TextView textView = new TextView(getActivity());
-            textView.setGravity(Gravity.CENTER);
-            Bundle args = getArguments();
-            textView.setText(Integer.toString(args.getInt(ARG_SECTION_NUMBER)));
-            return textView;
+        	
+        	GridView gridView = new GridView(getActivity().getApplicationContext());
+        	
+        	DatabaseHelper helper = new DatabaseHelper(getActivity().getApplicationContext());
+            CellDAO cellDAO = new CellDAO(helper);            
+            ArrayList<Cell> cells =  cellDAO.listCells();
+            
+        	CardGridViewAdapter adapter = new CardGridViewAdapter(getActivity().getApplicationContext(), cells);
+            gridView.setAdapter(adapter);
+            gridView.setNumColumns(3);
+            gridView.setVerticalSpacing(2);
+            gridView.setHorizontalSpacing(2);
+            
+            return gridView;
         }
     }
 }

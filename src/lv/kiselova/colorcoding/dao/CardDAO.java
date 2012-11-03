@@ -46,6 +46,12 @@ public class CardDAO {
 		Log.v(LOG_TAG, "Card with id:" + id + " deleted");
 	}
 	
+	public void deleteAll (){
+		SQLiteDatabase db = this.dbHelper.getWritableDatabase();
+		db.delete(DatabaseContract.CardEntity.TABLE_NAME, null, null);
+		
+	}
+	
 	public ArrayList<Card> listCards (){
 		SQLiteDatabase db  = this.dbHelper.getReadableDatabase();
 		
